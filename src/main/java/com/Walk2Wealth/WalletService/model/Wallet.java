@@ -21,7 +21,7 @@ public class Wallet {
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private String username;
-    private String walletKey;
+    private String privateKey;
     private String walletPassword;
 
 
