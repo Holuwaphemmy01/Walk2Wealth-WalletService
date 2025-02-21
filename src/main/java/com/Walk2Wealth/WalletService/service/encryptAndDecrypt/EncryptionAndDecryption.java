@@ -1,4 +1,4 @@
-package com.Walk2Wealth.WalletService.service.encrypt;
+package com.Walk2Wealth.WalletService.service.encryptAndDecrypt;
 
 
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 @Service
-public class Encryption {
+public class EncryptionAndDecryption {
 
     private final static String ALGORITHM = "AES/CBC/PKCS5Padding";
-    private final static int KEY_LENGTH = 256;
+    private final static int KEY_SIZE = 256;
     private final static int ITERATIONS = 65536;
     private final static int SALT_LENGTH = 16;
     private final static int IV_LENGTH = 16;
@@ -34,7 +34,7 @@ public class Encryption {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
         byte[] encryptedBytes = cipher.doFinal(privateKey.getBytes());
 
-        return Base64.getEncoder().encodeToString(salt) + ":" +
+        return  Base64.getEncoder().encodeToString(salt) + ":" +
                 Base64.getEncoder().encodeToString(iv) + ":" +
                 Base64.getEncoder().encodeToString(encryptedBytes);
     }
