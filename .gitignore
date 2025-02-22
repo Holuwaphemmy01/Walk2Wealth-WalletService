@@ -36,3 +36,4 @@ pom.xml
 mvnw.cmd
 mvnw
 src/main/resources/application.properties
+src/test

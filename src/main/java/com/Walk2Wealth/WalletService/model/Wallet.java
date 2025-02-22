@@ -1,37 +1,37 @@
 package com.Walk2Wealth.WalletService.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 
 @Entity
+@Table(name = "wallet")
 public class Wallet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private UUID id;
+    @Column(name = "address")
     private String address;
-    private String balance;
+    @Column(name = "balance")
+    private BigDecimal balance;
+    @Column(name = "currency")
     private String currency;
+    @Column(name = "created_at")
     private Timestamp createdAt;
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
+    @Column(name = "user_id")
     private String username;
+    @Column(name = "private_key")
     private String privateKey;
+    @Column(name = "wallet_password")
     private String walletPassword;
-
-
-    public void setCreatedAt() {
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-    }
-
-    public void setUpdatedAt() {
-        this.updatedAt = new Timestamp(System.currentTimeMillis());
-    }
 
     public UUID getId() {
         return id;
@@ -49,11 +49,12 @@ public class Wallet {
         this.address = address;
     }
 
-    public String getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(BigDecimal balance) {
+        if(balance == null) this.balance = BigDecimal.ZERO;
         this.balance = balance;
     }
 
@@ -69,16 +70,16 @@ public class Wallet {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedAt() {
+        this.createdAt = Timestamp.from(Instant.now());
     }
 
     public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt() {
+        this.updatedAt = Timestamp.from(Instant.now());
     }
 
     public String getUsername() {

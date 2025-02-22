@@ -4,12 +4,15 @@ import com.Walk2Wealth.WalletService.dtos.request.CreateWalletRequest;
 import com.Walk2Wealth.WalletService.model.Wallet;
 import com.Walk2Wealth.WalletService.repository.WalletRepository;
 import com.Walk2Wealth.WalletService.service.encryptAndDecrypt.EncryptionAndDecryption;
+import com.Walk2Wealth.WalletService.service.hashPassword.HashPassword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.Hash;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.ECKeyPair;
 
+import java.math.BigDecimal;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -22,17 +25,17 @@ public class CreateWalletServiceImpl implements CreateWalletService {
     private WalletRepository walletRepository;
 
     @Autowired
-    private EncryptionAndDecryption encryptionAndDecryption;
+    private HashPassword hashPassword;
 
 
     @Override
     public String createWallet(CreateWalletRequest createWalletRequest) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
 
-        if(walletRepository.findByUsername(createWalletRequest.getUsername())) throw new IllegalArgumentException("User already exists");
         try{
 
             Credentials credentials = Credentials.create(Keys.createEcKeyPair());
             Wallet wallet = new Wallet();
+            wallet.setId();
             wallet.setUsername(createWalletRequest.getUsername());
             String encrypted = EncryptionAndDecryption.encryptPrivateKey(credentials.getEcKeyPair().getPrivateKey().toString(),createWalletRequest.getWalletPin());
             wallet.setPrivateKey(encrypted);
@@ -40,9 +43,8 @@ public class CreateWalletServiceImpl implements CreateWalletService {
             wallet.setCreatedAt();
             wallet.setUpdatedAt();
             wallet.setCurrency();
-            wallet.setId();
-            wallet.setWalletPassword(createWalletRequest.getWalletPin());
-            wallet.setWalletPassword(createWalletRequest.getWalletPin());
+            wallet.setBalance(BigDecimal.ZERO);
+            wallet.setWalletPassword(hashPassword.hash(createWalletRequest.getWalletPin()));
             Wallet saveWallet = walletRepository.save(wallet);
             return saveWallet.getAddress();
 

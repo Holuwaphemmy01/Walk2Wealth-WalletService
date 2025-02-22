@@ -1,6 +1,5 @@
 package com.Walk2Wealth.WalletService.dtos.request;
 
-import lombok.Data;
 
 
 public class CreateWalletRequest {
