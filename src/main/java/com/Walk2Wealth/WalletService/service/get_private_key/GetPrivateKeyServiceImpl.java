@@ -26,8 +26,8 @@ public class GetPrivateKeyServiceImpl implements GetPrivateKeyService {
         Wallet [] user = walletRepository.findWalletByUsername(getKeyRequest.getUserId());
         if(user.length == 0) throw new IllegalArgumentException("User not found");
         if(!hashPassword.checkPassword(getKeyRequest.getWalletPassword(), user[0].getWalletPassword())) throw new IllegalArgumentException("Wrong password");
-
-        System.out.println("This is your hashed password "+user[0].getPrivateKey());
         return EncryptionAndDecryption.decryptPrivateKey(user[0].getPrivateKey(), user[0].getWalletPassword());
     }
+
+
 }

@@ -52,6 +52,7 @@ public class EncryptionAndDecryption {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
         byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
+
         return new String(decryptedBytes);
     }
 

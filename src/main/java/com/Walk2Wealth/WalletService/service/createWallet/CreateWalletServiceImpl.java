@@ -37,14 +37,15 @@ public class CreateWalletServiceImpl implements CreateWalletService {
             Wallet wallet = new Wallet();
             wallet.setId();
             wallet.setUsername(createWalletRequest.getUsername());
-            String encrypted = EncryptionAndDecryption.encryptPrivateKey(credentials.getEcKeyPair().getPrivateKey().toString(),createWalletRequest.getWalletPin());
+            wallet.setWalletPassword(hashPassword.hash(createWalletRequest.getWalletPin()));
+            String encrypted = EncryptionAndDecryption.encryptPrivateKey(credentials.getEcKeyPair().getPrivateKey().toString(),
+                    wallet.getWalletPassword());
             wallet.setPrivateKey(encrypted);
             wallet.setAddress(credentials.getAddress());
             wallet.setCreatedAt();
             wallet.setUpdatedAt();
             wallet.setCurrency();
             wallet.setBalance(BigDecimal.ZERO);
-            wallet.setWalletPassword(hashPassword.hash(createWalletRequest.getWalletPin()));
             Wallet saveWallet = walletRepository.save(wallet);
             return saveWallet.getAddress();
 
